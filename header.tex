@@ -1,0 +1,120 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Standard header for working papers
+%
+% WPHeader.tex
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%
+%% Include general header where common packages are defined
+%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% general packages without options
+\usepackage{amsmath,amssymb,bbm}
+
+% graphics
+\usepackage{graphicx}
+
+% text formatting
+\usepackage[document]{ragged2e}
+\usepackage{pagecolor,color}
+
+
+
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[francais]{babel}
+
+
+
+% for framed figures or texts
+\usepackage{mdframed}
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+%% Idem general commands
+%%%%%%%%%%%%%%%%%%%%
+%% Commands
+
+\newcommand{\noun}[1]{\textsc{#1}}
+
+
+%% Math
+
+% Operators
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\Proba}{\mathbb{P}}
+
+\newcommand{\Covb}[2]{\ensuremath{\Cov\!\left[#1,#2\right]}}
+\newcommand{\Eb}[1]{\ensuremath{\E\!\left[#1\right]}}
+\newcommand{\Pb}[1]{\ensuremath{\Proba\!\left[#1\right]}}
+\newcommand{\Varb}[1]{\ensuremath{\Var\!\left[#1\right]}}
+
+% norm
+\newcommand{\norm}[1]{\| #1 \|}
+
+
+%% graphics
+
+% renew graphics command for relative path providment only ?
+%\renewcommand{\includegraphics[]{}}
+
+
+
+% geometry
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{float}
+
+% layout : use fancyhdr package
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\makeatletter
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead[RO,RE]{15-17/03/2017}
+\fancyhead[LO,LE]{TP1}
+\fancyfoot[RO,RE] {\thepage}
+\fancyfoot[LO,LE] {L1 54BEG3GO - S2 2017}
+\fancyfoot[CO,CE] {}
+
+
+\fancypagestyle{firststyle}
+{
+   \fancyhf{}
+   \fancyhead[RO,RE]{TP1 - 15-17/03/2017}
+   \fancyhead[LO,LE]{L1 54BEG3GO - S2 2017}
+}
+
+
+%\renewcommand{\abstractname}{Objectifs du TD}
+
+\renewcommand{\figurename}{\textbf{Document}}
+
+
+\makeatother
+
+
+%%%%%%%%%%%%%%%%%%%%%
+%% Begin doc
+%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+
