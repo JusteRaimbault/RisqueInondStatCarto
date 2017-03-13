@@ -1,7 +1,7 @@
 
 library(readxl)
 
-files = list.files('questionnaires/validated')
+files = list.files('data/questionnaires/validated')
 
 unfilled_string ="Ne saisir que le NOM de famille"
 
@@ -9,7 +9,7 @@ unfilled_string ="Ne saisir que le NOM de famille"
 d = data.frame()
 ldata = list()
 for(file in files){
-  #show(file)
+  show(file)
   #sheet1 = read_excel(file,sheet = 1,col_names = FALSE)
   #sheet2 = read_excel(file,sheet = 2,col_names = FALSE)
   #show(sheet1[1,3])
@@ -22,14 +22,17 @@ for(file in files){
   #}else{
   #  show(file)
   #}
-  sheet = read_excel(paste0('questionnaires/validated/',file),sheet = 1,col_names = FALSE)
+  sheet = read_excel(paste0('data/questionnaires/validated/',file),sheet = 1,col_names = FALSE)
   #show(sheet[1,3:5])
   #allnames=append(allnames,toupper(sheet[1,]))
   
   currentdata=data.frame(t(sheet))
-  show(dim(currentdata))
+  #show(dim(currentdata))
   #d=rbind(d,currentdata[3:nrow(currentdata),1:39])
-  ldata[[file]]=currentdata[3:nrow(currentdata),1:39]
+  currentd=currentdata[3:nrow(currentdata),1:39]
+  ldata[[file]]=currentd
+  #colnames(currentd)<-c(data.frame(sheet)[,1])
+  #show(sapply(currentd[,11],function(s){substr(s,1,5)})%in%communes$cp)
 }
 
 d = bind_rows(ldata)
