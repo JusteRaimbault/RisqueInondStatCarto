@@ -4,6 +4,7 @@ library(rgdal)
 library(cartography)
 library(rgeos)
 library(ggplot2)
+library(xlsx)
 
 setwd(paste0(Sys.getenv('MONITORAT'),'/L1StatCarto/DST/DST1TD'))
 
@@ -74,6 +75,9 @@ distances = sapply(d$cp[inds],function(s){gDistance(gCentroid(communes[communes$
 distancessdf = sapply(sdf$cp[indssdf],function(s){gDistance(gCentroid(communes[communes$cp==s,]),inondation)})
 
 
+ggplot(data.frame(conn=nivconn),aes(x=conn))+geom_bar()
+
+
 plot(distances,nivconn)
 plot(distances,risqinond)
 
@@ -103,6 +107,18 @@ wareas = sapply(d$cp[inds],function(s){ sum(areas*exp(-gDistance(gCentroid(commu
 plot(wareas,nivconn[inds])
 plot(wareas,risqinond[inds])
 
+means=c();sds=c();types=c();dbreaks=c();
+for(dbreak in seq(from=10000000,to =45000000,by=1000000)){
+  means=append(means,mean(nivconn[wareas<dbreak]));sds=append(sds,sd(nivconn[wareas<dbreak]));types=append(types,"small");dbreaks=append(dbreaks,dbreak)
+  means=append(means,mean(nivconn[wareas>dbreak]));sds=append(sds,sd(nivconn[wareas>dbreak]));types=append(types,"large");dbreaks=append(dbreaks,dbreak)
+}
+g=ggplot(data.frame(conn=means,connsd=sds,type=types,dbreak=dbreaks),aes(x=dbreak,y=conn,col=type,group=type))
+g+geom_point()+geom_line()+geom_errorbar(aes(ymin=conn-connsd,ymax=conn+connsd))
+
+
+
+
+
 
 g=ggplot(data.frame(distance=distances,risk=risqinond[inds]),aes(x=distance,y=risk))
 g+geom_point()+geom_smooth()
@@ -113,26 +129,78 @@ g+geom_point()+geom_smooth()
 g=ggplot(data.frame(distance=distances,conn=nivconn[inds]),aes(x=distance,y=conn))
 g+geom_point()+geom_smooth()
 
-g=ggplot(data.frame(area=wareas,conn=nivconn[inds]),aes(x=area,y=conn))
+g=ggplot(data.frame(area=wareas,conn=nivconn),aes(x=area,y=conn))
 g+geom_point()+geom_smooth()
 
 g=ggplot(data.frame(distance=distancessdf,conn=sdf$goodconn[indssdf]),aes(x=distance,y=conn))
 g+geom_point()+geom_smooth()
 
 
+# remove low connaissance and outliers
+nivconnmin = 2;wareamin=0;wareamax=20e7#wareamin=1e7;wareamax=3.5e7
+g=ggplot(data.frame(area=wareas[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax],conn=nivconn[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax]),aes(x=area,y=conn))
+g+geom_point()+geom_smooth()
+
+nivconnmin = 2;distmin=0;distmax=100000
+g=ggplot(data.frame(area=distances[nivconn>nivconnmin&distances>distmin&distances<distmax],conn=nivconn[nivconn>nivconnmin&distances>distmin&distances<distmax]),aes(x=area,y=conn))
+g+geom_point()+geom_smooth()
+
+
+# 
+distmin=2000;distmax=100000
+mean(nivconn[nivconn>nivconnmin&distances>distmin&distances<distmax])
+sd(nivconn[nivconn>nivconnmin&distances>distmin&distances<distmax])
+distmin=-1;distmax=2000
+mean(nivconn[nivconn>nivconnmin&distances>distmin&distances<distmax])
+sd(nivconn[nivconn>nivconnmin&distances>distmin&distances<distmax])
+
+
+
+wareamax=2.5e7;wareamin=1e7
+#wareamax=2.5e7;wareamin=0
+mean(nivconn[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax])
+sd(nivconn[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax])
+wareamin=2.5e7;wareamax=3.5e7
+mean(nivconn[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax])
+sd(nivconn[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax])
+
+# -> this data written to excel file
+cps=d$cp[inds]
+
+write.xlsx(data.frame(CP=cps,connaissance=nivconn), file='data/StatCarto_TP1.xlsx', sheetName="Donnees",
+           col.names=TRUE, row.names=FALSE, append=FALSE, showNA=TRUE)
+
+distmax=2000
+write.xlsx(data.frame(CP=cps[nivconn>nivconnmin],distance=distances[nivconn>nivconnmin],classe=ifelse(distances[nivconn>nivconnmin]<distmax,"proche","lointain"),connaissance=nivconn[nivconn>nivconnmin]), file='data/StatCarto_TP1.xlsx', sheetName="Distance",
+           col.names=TRUE, row.names=FALSE, append=TRUE, showNA=TRUE)
+
+wareamax=3.5e7;wareamin=1e7;wareamed=2.5e7
+write.xlsx(data.frame(
+  CP=cps[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax],
+  access=wareas[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax],
+  classe=ifelse(wareas[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax]<wareamed,"basse","haute"),
+  connaissance=nivconn[nivconn>nivconnmin&wareas>wareamin&wareas<wareamax]
+  ), file='data/StatCarto_TP1.xlsx', sheetName="Accessibilite",
+           col.names=TRUE, row.names=FALSE, append=TRUE, showNA=TRUE)
+
+
+######
+
+
+
 ## Carto connaissance du risque
 
-cols <- carto.pal(pal1 = "red.pal",n1 = 5)
+cols <- carto.pal(pal1 = "red.pal",n1 = 10)
 choroLayer(spdf = communes,spdfid = "cp",
            df = data.frame(sdf),dfid = 'cp',#"zip",
            var="conn",
            col=cols,
-           nclass=6,
-           breaks = seq(from=0.5,to=5.5,by=1.0),#quantile(data$NBMEN11,probs=seq(from=0,to=1,by=0.2),na.rm=TRUE),
+           nclass=11,
+           breaks = seq(from=0.5,to=5.5,by=0.5),#quantile(data$NBMEN11,probs=seq(from=0,to=1,by=0.2),na.rm=TRUE),
            add=FALSE,lwd = 0.01,
            legend.pos = "topleft",
            legend.title.txt = "connaissance",
-           legend.values.rnd = 1.0
+           legend.values.rnd = 0.5
 )
 plot(inondation,add=T,col='blue',lwd=0.2)
 plot(communes,border = "grey20",add=TRUE, lwd=0.2)
@@ -146,7 +214,10 @@ layoutLayer(title = "Connaissance du risque",
 
 
 ## map area and distance
-distances = sapply(communes$cp,function(s){gDistance(gCentroid(communes[communes$cp==s,]),inondation)})
+#alldistances = sapply(communes,function(s){gDistance(gCentroid(communes[communes$cp==s,]),inondation)})
+alldistances = c();
+for(i in 1:length(communes)){alldistances=append(alldistances,gDistance(gCentroid(communes[i,]),inondation))
+}
 
 cols <- carto.pal(pal1 = "red.pal",n1 = 20)
 choroLayer(spdf = communes,spdfid = "cp",
@@ -157,13 +228,16 @@ choroLayer(spdf = communes,spdfid = "cp",
            #breaks = seq(from=0.5,to=5.5,by=1.0),#quantile(data$NBMEN11,probs=seq(from=0,to=1,by=0.2),na.rm=TRUE),
            add=FALSE,lwd = 0.01,
            legend.pos = "topleft",
-           legend.title.txt = "connaissance",
+           legend.title.txt = "distance",
            legend.values.rnd = 1.0
 )
 plot(inondation,add=T,col='blue',lwd=0.2)
 plot(communes,border = "grey20",add=TRUE, lwd=0.2)
 
-allareas = sapply(communes$cp,function(s){ sum(areas*exp(-gDistance(gCentroid(communes[communes$cp==s,]),inondation,byid = TRUE)/5000))})
+#allareas = sapply(communes$cp,function(s){ sum(areas*exp(-gDistance(gCentroid(communes[communes$cp==s,]),inondation,byid = TRUE)/5000))})
+allareas = c();
+for(i in 1:length(communes)){allareas=append(allareas,sum(areas*exp(-gDistance(gCentroid(communes[i,]),inondation,byid = TRUE)/5000)))
+}
 
 cols <- carto.pal(pal1 = "red.pal",n1 = 20)
 choroLayer(spdf = communes,spdfid = "cp",
@@ -174,7 +248,7 @@ choroLayer(spdf = communes,spdfid = "cp",
            #breaks = seq(from=0.5,to=5.5,by=1.0),#quantile(data$NBMEN11,probs=seq(from=0,to=1,by=0.2),na.rm=TRUE),
            add=FALSE,lwd = 0.01,
            legend.pos = "topleft",
-           legend.title.txt = "connaissance",
+           legend.title.txt = "surface pondérée",
            legend.values.rnd = 1.0
 )
 plot(inondation,add=T,col='blue',lwd=0.2)
