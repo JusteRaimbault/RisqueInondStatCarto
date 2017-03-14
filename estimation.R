@@ -10,17 +10,23 @@ setwd(paste0(Sys.getenv('MONITORAT'),'/L1StatCarto/DST/DST1TD'))
 
 
 # load data
-source('excel.R')
+#source('excel.R')
+# anonymize
+#d$NomSaisie = rep("",nrow(d));d$Volet0_1=rep("",nrow(d));d$VoletA__A1=rep("",nrow(d));d$VoletA__A2=rep("",nrow(d))
+#save(d,file='data/anonymized.RData')
 
-
+# load directly anonymized data
+load('data/anonymized.RData')
 
 #
 communes <- readOGR('data','communes')
 
 # correspondance cp <-> code com
-corcpinsee <- as.tbl(read.csv('data/correspondance-code-insee-code-postal.csv',sep=';',stringsAsFactors = FALSE))
+#corcpinsee <- as.tbl(read.csv('data/ignored/correspondance-code-insee-code-postal.csv',sep=';',stringsAsFactors = FALSE))
+#cpjoin = left_join(communes@data,corcpinsee[,1:2],by=c('INSEE_COMM' = 'Code.INSEE'))
+#save(cpjoin,file='data/cpjoin.RData')
+load('data/cpjoin.RData')
 
-cpjoin = left_join(communes@data,corcpinsee[,1:2],by=c('INSEE_COMM' = 'Code.INSEE'))
 communes@data$cp= sapply(cpjoin$Code.Postal, function(s){strsplit(s,'/')[[1]][1]})
 communes@data$dep = sapply(communes$cp, function(s){substr(s,1,2)})
 communes = communes[communes$dep%in%c("94","93","95","92","91","77","78","75"),]

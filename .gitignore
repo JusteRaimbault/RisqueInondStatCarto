@@ -1,4 +1,7 @@
 .DS_Store
 .texpadtmp
-data
+#data
+data/ignored
+data/questionnaires
+data/questionnaires_old
 
