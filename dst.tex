@@ -16,7 +16,7 @@
 \thispagestyle{firststyle}
 
 
-\textit{\textbf{Consignes : }Le tableau de données et de travail }\texttt{StatCarto{\_}TP1.xlsx}\textit{ est à télécharger sur Moodle ; vous ne serez pas notés sur le contenu final du fichier mais sur votre copie uniquement, sur laquelle il faudra bien noter tous les résultats demandés.}
+\textit{\textbf{Consignes : }Le tableau de données et de travail }\texttt{StatCarto{\_}TP1.xlsx}\textit{ est à télécharger sur Moodle ; vous ne serez pas notés sur le contenu final du fichier mais sur votre copie uniquement, sur laquelle il faudra bien noter tous les résultats demandés. Les questions facultatives sont fondamentales pour la cohérence de la démarche scientifique, mais assez loin du cours donc à traiter si vous êtes à l'aise avec les notions et définitions de base.}
 
 
 \bigskip
@@ -27,16 +27,20 @@
 Ce travail se base sur les données d'enquête que vous avez saisies lors du TD2. On propose de s'intéresser à la connaissance du risque d'inondation par les sondés. Sur 185 grilles saisies, 182 sont exploitables en terme de localisation précise de la commune des sondés.
 
 
-\paragraph{Contexte (3pts)}
+\paragraph{Contexte (Facultatif +3pts)}
 
 % blabla contexte, quanti quali etc
 
-$\rightarrow$ \textit{Discutez de problématiques possibles à partir des données que vous avez recueillies et saisies ; quels peuvent être les apports et limitations d'une approche quantitative, et comment peut-elle être complémentaire d'une approche qualitative ? Pensez vous que la distinction quantitatif-qualitatif soit pertinente en géographie contemporaine ?}
+$\rightarrow$ \textit{Quelles problématiques pourriez vous formuler à partir des données que vous avez recueillies et saisies ? Que peut nous apporter l’analyse quantitative de ces données, et quelles seraient ses limitations ? En quoi une approche une approche qualitative peut être complémentaire ? Pensez vous que la distinction quantitatif-qualitatif soit pertinente en géographie contemporaine ?}
+
+
+\paragraph{Nature des variables (3pts)}
+
+$\rightarrow$ \textit{Donnez le type de la variable ``niveau de connaissance du phénomène d'inondations'', donnée par un score numérique subjectif prenant des valeurs entières entre 0 et 5. Faites de même pour les coordonnées géographiques des communes de résidence des sondés.}
 
 
 
-
-\paragraph{Données (2pts)}
+\paragraph{Données (Facultatif +2pts)}
 
 % carte de loc, commentaire
 
@@ -45,14 +49,21 @@ $\rightarrow$ \textit{Commentez la distribution spatiale des lieux de résidence
 %Il faut ainsi garder à l'esprit la limitation des statistiques sur de faibles échantillons, la majorité des méthodes vues en cours étant valables
 
 
+\paragraph{Objets géographiques étudiés (2pts)}
+
+$\rightarrow$ \textit{Pour chaque commune, on agrège les scores des répondants y résidant en prenant leur moyenne. Quels sont les objets géographiques étudiés ? Comment est représentée l'information géographique leur correspondant ?}
 
 
 
-\paragraph{Statistiques générales (5pts)}
 
-L'onglet \texttt{Donnees} donne l'ensemble des scores donnant le niveau de connaissance du phénomène de crue (nombre entier entre 1 et 5).
 
-$\rightarrow$ \textit{Tracez le diagramme de distribution du niveau de connaissance (à reproduire sur votre copie) ; calculez moyenne et écart-type}\footnote{la formule vue en cours est implémentée par la fonction \texttt{ECARTTYPE} d'Excel\textregistered, tandis que la fonction \texttt{ECARTTYPEP} implémente l'estimateur non-biaisé de la variance. Le biais intrinsèque à l'estimateur standard est dû à l'utilisation de la moyenne estimée au sein de l'estimateur de variance. Il tend vers 0 quand la taille de l'échantillon tend vers l'infini. Dans notre cas, il est de l'ordre relatif du millième, vous pouvez utiliser la fonction de votre choix sans impact significatif sur le résultat.}\textit{ de l'échantillon. Commentez la forme de la distribution et les valeurs obtenues.}
+\paragraph{Statistiques générales (6pts)}
+
+L'onglet \texttt{Donnees} contient l'ensemble des scores donnant le niveau de connaissance du phénomène de crue (nombre entier entre 1 et 5).
+
+\medskip
+
+$\rightarrow$ \textit{Tracez l'histogramme du niveau de connaissance (à reproduire sur votre copie) ; calculez moyenne et écart-type}\footnote{la formule vue en cours est implémentée par la fonction \texttt{ECARTTYPE} d'Excel\textregistered, tandis que la fonction \texttt{ECARTTYPEP} implémente l'estimateur non-biaisé de la variance. Le biais intrinsèque à l'estimateur standard est dû à l'utilisation de la moyenne estimée au sein de l'estimateur de variance. Il tend vers 0 quand la taille de l'échantillon tend vers l'infini. Dans notre cas, il est de l'ordre relatif du millième, vous pouvez utiliser la fonction de votre choix sans impact significatif sur le résultat.}\textit{ de l'échantillon. Commentez la forme de la distribution et les valeurs obtenues. Discutez le choix de la valeur centrale moyenne ou médiane étant donné la forme de la distribution.}
 
 
 \paragraph{Rôle de la proximité et de l'accessibilité aux zones inondables (5pts)}
@@ -63,6 +74,8 @@ On cherche à savoir si la distance du domicile à une zone inondable influence 
 
 $\rightarrow$ \textit{Calculez moyenne et écart-type pour chacune des classes (aide : utiliser la fonction ``trier'' pour ordonner par classe). Proposez une interprétation sur l'effet de la distance.}
 
+
+\medskip
 
 La distance brute ne prend pas en compte l'intensité des inondations potentielles (voir surfaces inondables en document 2). Pour cela, on définit une mesure ``d'accessibilité aux zones inondables''\footnote{qui correspond à la moyenne des surfaces des zones inondables pondérées par la distance à la commune, donnée pour la commune $i$, avec $A_j$ surfaces des zones inondables, $Z_i = \sum_j A_j\cdot \exp\left(- d_{ij}/d_0 \right)$ avec ici $d_0=5km$. Elle est également cartographiée en document 3.} qu'il faut interpréter comme une quantité d'inondation potentielle dans un voisinage géographique de la commune. L'onglet \texttt{Accessibilite} donne ces valeurs et une classification simplifiée (``haute'' et ``basse'').
 
@@ -87,7 +100,7 @@ $\rightarrow$ \textit{Commentez la synthèse cartographique du niveau de connais
 $\rightarrow$ \textit{En correspondance à des problématiques proposées en première question, discutez d'autres variables ou aspects\footnote{Qui peuvent être dans le questionnaire initial ou non ; souvent un premier questionnaire pilote est administré et le questionnaire est modifié selon les réponses obtenues, pour adapter ou préciser des points.} qui seraient pertinents à prendre en compte.}
 
 
-\paragraph{Données Synthétiques (1pts)}
+\paragraph{Données Synthétiques (Facultatif +1pts)}
 
 $\rightarrow$ \textit{Discutez de l'intérêt d'extrapoler des données manquantes (communes sans répondant) ou de simuler des données synthétiques (réponses ayant la même structure statistique) à partir du jeu de données disponibles.}
 
@@ -110,9 +123,9 @@ $\rightarrow$ \textit{Discutez de l'intérêt d'extrapoler des données manquant
 
 \begin{figure}
 \centering
-\includegraphics[width=0.48\textwidth]{maps/distance2}
-\includegraphics[width=0.48\textwidth]{maps/surfponderee}
-\caption{(Gauche) Distance des communes aux zones inondables ; (Droite) Surface accessible de zone inondable.}
+\includegraphics[width=0.8\textwidth]{maps/distance2}
+\includegraphics[width=0.8\textwidth]{maps/surfponderee}
+\caption{(Haut) Distance des communes aux zones inondables ; (Bas) Surface accessible de zone inondable.}
 \end{figure}
 
 
@@ -127,18 +140,18 @@ $\rightarrow$ \textit{Discutez de l'intérêt d'extrapoler des données manquant
 %\strut\hfill$\star$\hfill\strut\par
 
 
-
-
-
-\section*{Exercice Facultatif}
-
-
-\textit{\textbf{Consigne : }Exercice à traiter si vous avez fini le premier largement en avance et facilement.}
-
-\bigskip
-
-La question de la ``robustesse statistique'' d'une estimation, par exemple dans notre cas d'une moyenne ou d'un écart-type, est essentielle pour la validation des interprétations qu'on peut en tirer. On se propose d'illustrer cette notion dans un cas simple, sur un jeu de données synthétiques.
-
+%
+%
+%
+%\section*{Exercice Facultatif}
+%
+%
+%\textit{\textbf{Consigne : }Exercice à traiter si vous avez fini le premier largement en avance et facilement.}
+%
+%\bigskip
+%
+%La question de la ``robustesse statistique'' d'une estimation, par exemple dans notre cas d'une moyenne ou d'un écart-type, est essentielle pour la validation des interprétations qu'on peut en tirer. On se propose d'illustrer cette notion dans un cas simple, sur un jeu de données synthétiques.
+%
 
 
 
